@@ -11,6 +11,7 @@
             --card-bg: #2d2d2d;
             --text-color: #e0e0e0;
             --btn-back-bg: #546e7a;
+            --visited-color: #2e7d32; /* 已點擊後的綠色 */
         }
 
         /* 開燈模式（鵝黃版面） */
@@ -20,6 +21,7 @@
             --text-color: #001f3f; 
             --gold: #b8860b;
             --btn-back-bg: #a1b0b8;
+            --visited-color: #8da38e; /* 鵝黃模式下較柔和的綠 */
         }
 
         * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
@@ -72,6 +74,13 @@
             justify-content: center;
             min-height: 65px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        /* 按鈕點擊後的變色樣式 */
+        .menu-item.visited {
+            background-color: var(--visited-color);
+            color: white;
+            border-color: transparent;
         }
 
         #content-page {
@@ -130,7 +139,6 @@
             cursor: pointer;
         }
 
-        /* 底部按鈕樣式 */
         .bottom-btn {
             position: fixed;
             bottom: 25px;
@@ -150,7 +158,6 @@
         .theme-toggle { right: 25px; }
         .quote-toggle { left: 25px; }
 
-        /* 法語彈窗樣式 */
         #quote-modal {
             display: none;
             position: fixed;
@@ -194,7 +201,7 @@
     <div id="quote-modal" onclick="toggleQuote(false)">
         <div class="modal-box" onclick="event.stopPropagation()">
             <strong style="color:var(--gold)">緣道祖師：</strong>
-以此無念之念，念念不離眾生。
+以無念之念，念念不離眾生。
 住無相之相，法法不離自性。
 
 <strong style="color:var(--gold)">導師：</strong>
@@ -210,21 +217,21 @@
             <p class="subtitle">佛乘宗法要序</p>
         </header>
         <div class="menu-grid">
-            <div class="menu-item" onclick="showPage('king')">大自在王佛讚頌</div>
-            <div class="menu-item" onclick="showPage('nine')">九字禪</div>
-            <div class="menu-item" onclick="showPage('tenOne')">十大一如</div>
-            <div class="menu-item" onclick="showPage('tenHeart')">十無量相應心品</div>
-            <div class="menu-item" onclick="showPage('fiveTreasures')">皈依五寶</div>
-            <div class="menu-item" onclick="showPage('repentance')">禮佛拜懺</div>
-            <div class="menu-item" onclick="showPage('rules')">門規與密囑</div>
-            <div class="menu-item" onclick="showPage('preface')">佛乘宗法要序</div>
+            <div id="btn-king" class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
+            <div id="btn-nine" class="menu-item" onclick="showPage('nine', this)">九字禪</div>
+            <div id="btn-tenOne" class="menu-item" onclick="showPage('tenOne', this)">十大一如</div>
+            <div id="btn-tenHeart" class="menu-item" onclick="showPage('tenHeart', this)">十無量相應心品</div>
+            <div id="btn-fiveTreasures" class="menu-item" onclick="showPage('fiveTreasures', this)">皈依五寶</div>
+            <div id="btn-repentance" class="menu-item" onclick="showPage('repentance', this)">禮佛拜懺</div>
+            <div id="btn-rules" class="menu-item" onclick="showPage('rules', this)">門規與密囑</div>
+            <div id="btn-preface" class="menu-item" onclick="showPage('preface', this)">佛乘宗法要序</div>
         </div>
     </div>
 
     <div id="content-page">
         <h2 id="page-title-display" style="color: var(--gold); text-align: center; font-size: 1.4rem; margin-top: 5px;"></h2>
         <div class="controls">
-            <button id="playBtn" class="btn-play" onclick="speak(false)">▶ 播放</button>
+            <button id="playBtn" class="btn-play" onclick="handlePlay()">▶ 播放</button>
             <button id="pauseBtn" class="btn-pause hidden" onclick="pause()">⏸ 暫停</button>
             <button id="stopBtn" class="btn-stop" onclick="stop()">⏹ 停止</button>
         </div>
@@ -246,12 +253,12 @@
             },
             repentance: { 
                 title: "禮佛拜懺文", 
-                content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子法悟張悅語無始劫來，因貪瞋癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" 
+                content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子法悟張悦語無始劫來，因貪瞋癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" 
             },
             rules: { title: "門規與密囑", content: "【門規】\n第一條：尊師重道，護持五寶。\n第二條：慈悲平等，普度眾生。\n第三條：自立活命，奉獻公益。\n第四條：遵行門規，光大本門。\n\n【密囑】\n第一項：每月將收入一部分捐獻。\n第二項：修行密法不得超傳。" },
             preface: { 
                 title: "佛乘宗法要序", 
-                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛唯心極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
+                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路處理；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛唯心極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
             }
         };
 
@@ -259,6 +266,7 @@
         let utterance = null;
         let isLooping = false;
         let currentId = '';
+        let isSecondRound = false;
 
         function toggleTheme() {
             const body = document.body;
@@ -271,8 +279,13 @@
             document.getElementById('quote-modal').style.display = show ? 'flex' : 'none';
         }
 
-        function showPage(id) {
+        function showPage(id, element) {
             currentId = id;
+            isSecondRound = false;
+            // 變更按鈕顏色
+            if (element) {
+                element.classList.add('visited');
+            }
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('content-page').style.display = 'block';
             document.getElementById('page-title-display').innerText = data[id].title;
@@ -287,38 +300,64 @@
             document.getElementById('content-page').style.display = 'none';
         }
 
-        function speak(isSecondRound) {
-            if (synth.speaking && synth.paused) {
+        function handlePlay() {
+            if (synth.paused) {
                 synth.resume();
                 updateButtons(true);
-                return;
+            } else {
+                startSpeaking(false);
             }
-            stopSpeechOnly();
+        }
+
+        function startSpeaking(roundTwo) {
+            synth.cancel();
             isLooping = true;
+            isSecondRound = roundTwo;
             
-            let textToRead = data[currentId].content;
+            let originalText = data[currentId].content;
 
             // 禮佛拜懺文特殊邏輯：第二次循環開始不讀標題
             if (currentId === 'repentance' && isSecondRound) {
-                const lines = textToRead.split('\n');
+                const lines = originalText.split('\n');
                 if (lines[0].includes('【禮佛拜懺文】')) {
                     lines.shift();
-                    textToRead = lines.join('\n');
+                    originalText = lines.join('\n');
                 }
             }
+
+            // 讀音修正：將「佛乘宗」轉換為朗讀用的「佛盛宗」
+            let textToRead = originalText.replace(/佛乘宗/g, "佛盛宗");
 
             utterance = new SpeechSynthesisUtterance(textToRead);
             utterance.lang = 'zh-TW';
             utterance.rate = 0.88; 
-            utterance.onend = function() { if (isLooping) { speak(true); } else { updateButtons(false); } };
+            
+            utterance.onend = function() {
+                if (isLooping) {
+                    startSpeaking(true);
+                } else {
+                    updateButtons(false);
+                }
+            };
+
             synth.speak(utterance);
             updateButtons(true);
         }
 
-        function pause() { if (synth.speaking) { synth.pause(); updateButtons(false); } }
-        function stop() { isLooping = false; synth.cancel(); updateButtons(false); }
-        function stopSpeechOnly() { synth.cancel(); }
-        
+        function pause() {
+            if (synth.speaking) {
+                synth.pause();
+                updateButtons(false);
+            }
+        }
+
+        function stop() {
+            isLooping = false;
+            isSecondRound = false;
+            synth.cancel();
+            updateButtons(false);
+        }
+
         function updateButtons(isPlaying) {
             const playBtn = document.getElementById('playBtn');
             const pauseBtn = document.getElementById('pauseBtn');
