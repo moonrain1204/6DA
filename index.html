@@ -175,7 +175,7 @@
             white-space: pre-wrap;
             line-height: 1.8;
             position: relative;
-            text-align: left; /* 修正：將彈窗內容設為靠左對齊 */
+            text-align: left;
         }
         .modal-close {
             margin-top: 20px;
@@ -221,7 +221,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.1.5</span>
+            <span class="version-header">Version 1.1.6</span>
         </header>
         <div class="menu-grid">
             <div id="btn-king" class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
@@ -268,13 +268,15 @@
             rules: { title: "門規與密囑", content: "【門規】\n第一條：尊師重道，護持五寶。\n第二條：慈悲平等，普度眾生。\n第三條：自立活命，奉獻公益。\n第四條：遵行門規，光大本門。\n\n【密囑】\n第一項：每月將收入一部分捐獻。\n第二項：修行密法不得超傳。" },
             preface: { 
                 title: "佛乘宗法要序", 
-                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
+                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
             }
         };
 
         const synth = window.speechSynthesis;
         let isLooping = false;
         let currentId = '';
+        let speechQueue = [];
+        let queueIndex = 0;
 
         function toggleTheme() {
             const body = document.body;
@@ -307,46 +309,59 @@
         }
 
         function handlePlay() {
-            if (synth.speaking) {
-                synth.cancel();
-            }
+            stop(); // 先徹底清空之前的狀態
             isLooping = true;
-            startSpeaking();
+            prepareAndPlay();
         }
 
-        function startSpeaking() {
+        function prepareAndPlay() {
             if (!isLooping) return;
 
             let originalText = data[currentId].content;
-
-            // 朗讀修正
-            let textToRead = originalText.replace(/佛乘宗/g, "佛盛宗");
-            if (currentId === 'preface') {
-                textToRead = textToRead.replace(/實相/g, "實像");
-            }
-
-            // 十無量相應心品：排除前面的數字朗讀
-            if (currentId === 'tenHeart') {
-                textToRead = textToRead.replace(/[一二三四五六七八九十]、/g, "");
-            }
-
-            const utterance = new SpeechSynthesisUtterance(textToRead);
-            utterance.lang = 'zh-TW';
-            utterance.rate = 0.88; 
             
-            utterance.onend = function(event) {
-                // 如果循環播放開啟，延遲一下立即開始下一輪
-                if (isLooping) {
-                    setTimeout(() => {
-                        if (isLooping) startSpeaking();
-                    }, 500);
-                }
+            // 讀音修正
+            let processedText = originalText.replace(/佛乘宗/g, "佛盛宗");
+            if (currentId === 'preface') {
+                processedText = processedText.replace(/實相/g, "實像");
+            }
+            if (currentId === 'tenHeart') {
+                processedText = processedText.replace(/[一二三四五六七八九十]、/g, "");
+            }
+
+            // 核心修正：將長文切碎成句子隊列，防止瀏覽器超時
+            // 依據標點符號切分：，。；、\n
+            speechQueue = processedText.split(/[，。；\n]/).filter(t => t.trim().length > 0);
+            queueIndex = 0;
+            
+            playNextChunk();
+        }
+
+        function playNextChunk() {
+            if (!isLooping) return;
+
+            // 如果這一輪播完了，重頭開始（實現持續循環）
+            if (queueIndex >= speechQueue.length) {
+                queueIndex = 0;
+                setTimeout(playNextChunk, 800); 
+                return;
+            }
+
+            const chunk = speechQueue[queueIndex];
+            const utterance = new SpeechSynthesisUtterance(chunk);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.88;
+
+            utterance.onend = () => {
+                queueIndex++;
+                playNextChunk();
             };
 
-            utterance.onerror = function(event) {
-                console.error('SpeechSynthesisUtterance error', event);
+            utterance.onerror = (e) => {
+                console.error("Speech Error:", e);
+                // 發生錯誤時嘗試跳過該句繼續
                 if (isLooping) {
-                    setTimeout(() => startSpeaking(), 1000);
+                    queueIndex++;
+                    setTimeout(playNextChunk, 500);
                 }
             };
 
@@ -355,16 +370,27 @@
 
         function stop() {
             isLooping = false;
+            queueIndex = 0;
+            speechQueue = [];
             synth.cancel(); 
         }
 
-        // 解決部分移動端語音 15 秒自動停止的 Bug
+        // 強力心跳機制：每 5 秒強制恢復，防止移動端休眠
         setInterval(() => {
-            if (synth.speaking && !synth.paused) {
+            if (isLooping && synth.speaking) {
                 synth.pause();
                 synth.resume();
             }
+        }, 5000);
+
+        // 如果點擊了播放但系統一直沒出聲，自動觸發一次重試
+        setInterval(() => {
+            if (isLooping && !synth.speaking && speechQueue.length > 0) {
+                console.log("Detected silent loop, restarting...");
+                playNextChunk();
+            }
         }, 10000);
+
     </script>
 </body>
 </html>
