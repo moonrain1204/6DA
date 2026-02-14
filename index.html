@@ -15,11 +15,11 @@
             --blue-accent: #1976d2;
         }
 
-        /* 修正白天模式文字為深藍色 */
+        /* 白天模式優化：字體放大、加粗、顏色改為 #0000C6 */
         body.light-mode {
             --bg-color: #fff9e6; 
             --card-bg: #fdf2d0;
-            --text-color: #003366; /* 深藍色文字 */
+            --text-color: #0000C6; 
             --gold: #8b6b00;
             --btn-back-bg: #78909c;
             --visited-color: #458b47;
@@ -37,6 +37,8 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            font-size: 1.2rem; /* 全局字體放大 */
+            font-weight: bold; /* 全局加粗 */
         }
         header {
             text-align: center;
@@ -45,76 +47,75 @@
             width: 100%;
             max-width: 800px;
         }
-        h1 { font-size: 1.4rem; color: var(--gold); letter-spacing: 2px; margin: 0 0 10px 0; line-height: 1.3; }
-        .subtitle { font-size: 1.1rem; color: #888; margin: 0; }
-        .version-header { font-size: 0.75rem; color: #888; margin-top: 8px; display: block; }
+        h1 { font-size: 1.6rem; color: var(--gold); letter-spacing: 2px; margin: 0 0 10px 0; line-height: 1.3; font-weight: 900; }
+        .subtitle { font-size: 1.2rem; color: #888; margin: 0; }
         
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 15px;
             padding: 20px;
             width: 100%;
             max-width: 800px;
         }
         @media (min-width: 480px) {
             .menu-grid { grid-template-columns: 1fr 1fr; }
-            h1 { font-size: 1.8rem; }
         }
 
         .menu-item {
             background: var(--card-bg);
-            border: 1px solid #444;
-            padding: 20px 15px;
+            border: 2px solid #444;
+            padding: 22px 15px;
             text-align: center;
             cursor: pointer;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1.25rem;
             color: var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 65px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            min-height: 70px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             -webkit-tap-highlight-color: transparent;
+            font-weight: 900;
         }
         .menu-item.visited { background-color: var(--visited-color); color: white; border-color: transparent; }
 
         .home-controls {
             width: 95%;
             max-width: 800px;
-            padding: 20px;
+            padding: 25px;
             background: rgba(0,0,0,0.1);
             border-radius: 15px;
             margin-bottom: 20px;
             text-align: center;
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold);
         }
         .time-info {
-            margin-top: 15px;
-            font-size: 1rem;
+            margin-top: 20px;
+            font-size: 1.15rem;
             color: var(--text-color);
-            line-height: 1.8;
-            text-align: left;
-            display: inline-block;
+            line-height: 2;
+            text-align: center;
         }
-        .time-label { color: var(--gold); font-weight: bold; }
+        .data-highlight { color: var(--gold); font-weight: 900; }
 
         .toggle-container {
             margin: 15px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
         .btn-toggle {
-            padding: 8px 25px;
-            border-radius: 20px;
+            padding: 10px 30px;
+            border-radius: 25px;
             border: 2px solid #666;
             background: #444;
             color: #ccc;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 900;
+            font-size: 1.1rem;
         }
         .btn-toggle.active {
             background: var(--blue-accent);
@@ -125,30 +126,31 @@
         #content-page { display: none; width: 100%; max-width: 800px; padding: 20px 15px; }
         .content-body {
             background: var(--card-bg);
-            padding: 25px;
-            line-height: 1.9;
+            padding: 30px;
+            line-height: 2;
             border-radius: 12px;
-            font-size: 1.15rem;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--gold);
+            font-size: 1.3rem; /* 內文放大 */
+            font-weight: bold;
+            margin-bottom: 25px;
+            border-left: 6px solid var(--gold);
             text-align: justify;
         }
         .indent-box { display: block; padding-left: 4.5em; text-indent: -4.5em; margin-bottom: 15px; }
 
-        .controls { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 25px; }
+        .controls { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
         .audio-btns { display: flex; justify-content: center; gap: 15px; width: 100%; }
         .controls button, .home-controls button:not(.btn-toggle) {
-            flex: 1; max-width: 180px; padding: 12px 0; border: none; border-radius: 8px;
-            cursor: pointer; font-size: 1rem; font-weight: bold;
+            flex: 1; max-width: 200px; padding: 15px 0; border: none; border-radius: 10px;
+            cursor: pointer; font-size: 1.1rem; font-weight: 900;
         }
         .btn-play { background-color: #2e7d32; color: white; }
         .btn-stop { background-color: #c62828; color: white; }
         
         .bottom-btn {
-            position: fixed; bottom: 25px; width: 55px; height: 55px;
+            position: fixed; bottom: 25px; width: 60px; height: 60px;
             background-color: var(--gold); color: white; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000;
+            font-size: 28px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 1000;
         }
         .theme-toggle { right: 25px; }
         .quote-toggle { left: 25px; }
@@ -158,11 +160,11 @@
             background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center;
         }
         .modal-box {
-            background: var(--card-bg); color: var(--text-color); padding: 30px;
-            border-radius: 15px; max-width: 90%; width: 400px; border: 2px solid var(--gold);
-            white-space: pre-wrap; line-height: 1.8;
+            background: var(--card-bg); color: var(--text-color); padding: 35px;
+            border-radius: 15px; max-width: 90%; width: 420px; border: 2px solid var(--gold);
+            white-space: pre-wrap; line-height: 2; font-size: 1.2rem;
         }
-        footer { padding: 25px; font-size: 0.85rem; text-align: center; color: var(--gold); }
+        footer { padding: 30px; font-size: 1rem; text-align: center; color: var(--gold); font-weight: 900; }
     </style>
 </head>
 <body>
@@ -179,7 +181,7 @@
 <strong style="color:var(--gold)">善性導師：</strong>
 勿繫塵勞，精進歡喜。
 篤行門規，佛道自成。
-            <button style="margin-top:20px; width:100%; padding:10px; background:var(--gold); color:white; border:none; border-radius:5px;" onclick="toggleQuote(false)">關閉</button>
+            <button style="margin-top:25px; width:100%; padding:12px; background:var(--gold); color:white; border:none; border-radius:8px; font-weight:900;" onclick="toggleQuote(false)">關閉</button>
         </div>
     </div>
 
@@ -187,7 +189,6 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.8.0 (Refined Data & Contrast)</span>
         </header>
         
         <div class="menu-grid">
@@ -211,25 +212,25 @@
             </div>
 
             <div class="time-info">
-                <div><span class="time-label">第一組：</span><span id="stat-round">目前未播放</span></div>
-                <div><span class="time-label">第二組：</span>當前這輪總需時長：<span id="stat-duration">-- 分 -- 秒</span></div>
-                <div><span class="time-label">第三組：</span>當前這輪結束時間：<span id="stat-endtime">--:--</span></div>
+                <div id="stat-round" class="data-highlight" style="margin-bottom: 10px;">目前未播放</div>
+                <div>當前這輪總需時長：<span id="stat-duration" class="data-highlight">-- 分 -- 秒</span></div>
+                <div>當前這輪結束時間：<span id="stat-endtime" class="data-highlight">--:--</span></div>
             </div>
         </div>
         <footer>福慧增長 早證菩提</footer>
     </div>
 
     <div id="content-page">
-        <h2 id="page-title-display" style="color: var(--gold); text-align: center; font-size: 1.4rem;"></h2>
+        <h2 id="page-title-display" style="color: var(--gold); text-align: center; font-size: 1.7rem; font-weight: 900;"></h2>
         <div class="controls">
             <div id="page-audio-btns" class="audio-btns">
                 <button id="playBtn" class="btn-play" onclick="handlePlay()">▶ 播放錄音</button>
                 <button id="stopBtn" class="btn-stop" onclick="handleStop()">⏹ 停止</button>
             </div>
-            <div id="audio-status" style="font-size:0.9rem; color:var(--gold); margin-top:5px;"></div>
+            <div id="audio-status" style="font-size:1rem; color:var(--gold); margin-top:5px; font-weight:900;"></div>
         </div>
         <div id="page-content" class="content-body"></div>
-        <button class="btn-back" onclick="goHome()">回首頁</button>
+        <button class="btn-back" onclick="goHome()" style="font-weight:900;">回首頁</button>
         <footer style="position: static;">福慧增長 早證菩提</footer>
     </div>
 
@@ -245,13 +246,13 @@
 
         const data = {
             king: { title: "大自在王佛讚頌", file: "大自在王佛讚頌.wav", isHtml: false, content: "【大自在王佛讚頌】\n大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界、精神界之一如。法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。" },
-            nine: { title: "九字禪", file: "九字禪.wav", isHtml: false, content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義...\n（內容同前）" },
-            tenOne: { title: "十大一如", file: "十大一如.wav", isHtml: false, content: "【十大一如】\n體大：心物一如，空有一如，身心不二，本性即為佛性...\n（內容同前）" },
+            nine: { title: "九字禪", file: "九字禪.wav", isHtml: false, content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義，是眾生向佛至心皈依信順的話。\n\n本師：本性，即自性，即佛性，即法性。法性就是諸佛法身之總理體，眾生佛性之本元，即 大自在王佛，故稱本師。\n\n大：體（性）、相、智、德、理、事、能、用、時、空，與法界同一理量，故名大。\n\n自在：萬法拘束不得，圓融精神與物質世界，故無礙解脫自在，自證常樂我淨之境界。\n\n王：一切佛之自性法身，不假他修，而本性具足萬法與法界同理同量。\n\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。" },
+            tenOne: { title: "十大一如", file: "十大一如.wav", isHtml: false, content: "【十大一如】\n體大：心物一如，空有一如，身心不二，本性即為佛性。\n\n相大：統一有色、無色之法界萬相。亦即一合相之境界。自他一如故。\n\n智大：智慧心能，法界萬有，過去、現在、未來之一切理事無所不知。\n\n德大：即一合相之德，普度眾生之願行。自度度他。以無緣大慈、同體大悲、圓度法界眾生。\n\n理大：統法界無量法門之理則、法要。\n\n事大：世出世法之圓融，無量時空中轉十度萬行之大法輪，即普度眾生之行相。\n\n能大：圓通無量神通法門，身能、心能、宇宙能，一為無量，無量為一，一多圓融，質能互變，周遍法界，無所不能。\n\n用大：體用、動靜、隱顯，理事一如，法界無盡，十方三世圓滿一心轉大法輪。\n\n時大：過去、現在、未來三世一如，短劫入長劫，長劫入短劫，凡夫因變動而計量，為時空之虛妄分別有。\n\n空大：一多大小無礙圓融，凡夫因妄執形體變易相，而生空有之計量。" },
             tenHeart: { title: "十無量相應心品", file: "十無量相應心品.wav", isHtml: true, content: getHeartContent() },
-            fiveTreasures: { title: "皈依五寶", file: "皈依五寶.wav", isHtml: false, content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相...\n（內容同前）" },
-            repentance: { title: "禮佛拜懺文", file: "禮佛拜懺文.wav", isHtml: false, content: "【禮佛拜懺文】\n一心圓法界，感應遍十方...\n（內容同前）" },
+            fiveTreasures: { title: "皈依五寶", file: "皈依五寶.wav", isHtml: false, content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶應具足。" },
+            repentance: { title: "禮佛拜懺文", file: "禮佛拜懺文.wav", isHtml: false, content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子○○○無始劫來，因貪偵癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" },
             rules: { title: "門規", file: "門規.wav", isHtml: true, content: getRulesContent() },
-            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣...\n（內容同前）" }
+            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果徹因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" }
         };
 
         const audio = document.getElementById('mainAudio');
@@ -272,12 +273,10 @@
         }
 
         function updateTimeData() {
-            // 第二組：總時長
             const mins = Math.floor(singleRoundSeconds / 60);
             const secs = Math.floor(singleRoundSeconds % 60);
             document.getElementById('stat-duration').innerText = `${mins} 分 ${secs} 秒`;
             
-            // 第三組：結束點
             const now = new Date();
             const end = new Date(now.getTime() + singleRoundSeconds * 1000);
             document.getElementById('stat-endtime').innerText = `${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}`;
@@ -296,7 +295,7 @@
             roundCount = 1;
             playNext();
             document.getElementById('homePlayAllBtn').innerText = "● 播放中";
-            updateTimeData(); // 每次開始時重刷結束時間
+            updateTimeData();
         }
 
         function playNext() {
@@ -319,7 +318,6 @@
             audio.src = encodeURIComponent(data[key].file);
             audio.play();
             
-            // 第一組：動態更新狀態
             document.getElementById('stat-round').innerText = `第 ${roundCount} 輪：${data[key].title}`;
             sequenceIndex++;
         }
@@ -344,7 +342,7 @@
             else contentEl.innerText = data[id].content;
             
             if (isSequencePlaying) {
-                document.getElementById('audio-status').innerText = "（連播進行中，單頁播放已停用）";
+                document.getElementById('audio-status').innerText = "（連播中，單頁播放已停用）";
                 document.getElementById('page-audio-btns').style.opacity = "0.4";
                 document.getElementById('page-audio-btns').style.pointerEvents = "none";
             } else {
