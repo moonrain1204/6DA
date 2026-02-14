@@ -109,7 +109,7 @@
         }
         .controls button {
             flex: 1; 
-            max-width: 140px;
+            max-width: 180px;
             padding: 12px 0;
             border: none;
             border-radius: 8px;
@@ -118,13 +118,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
             font-weight: bold;
         }
         .btn-play { background-color: #2e7d32; color: white; }
-        .btn-pause { background-color: #f9a825; color: black; }
         .btn-stop { background-color: #c62828; color: white; }
-        .hidden { display: none !important; }
 
         .btn-back { 
             background-color: var(--btn-back-bg); 
@@ -235,7 +233,7 @@
         </div>
         <footer>
             福慧增長 早證菩提
-            <span class="version">Version 1.1.2</span>
+            <span class="version">Version 1.1.3</span>
         </footer>
     </div>
 
@@ -243,23 +241,22 @@
         <h2 id="page-title-display" style="color: var(--gold); text-align: center; font-size: 1.4rem; margin-top: 5px;"></h2>
         <div class="controls">
             <button id="playBtn" class="btn-play" onclick="handlePlay()">▶ 播放</button>
-            <button id="pauseBtn" class="btn-pause hidden" onclick="pause()">⏸ 暫停</button>
             <button id="stopBtn" class="btn-stop" onclick="stop()">⏹ 停止</button>
         </div>
         <div id="page-content" class="content-body"></div>
         <button class="btn-back" onclick="goHome()">回首頁</button>
         <footer style="position: static;">
             福慧增長 早證菩提
-            <span class="version">Version 1.1.2</span>
+            <span class="version">Version 1.1.3</span>
         </footer>
     </div>
 
     <script>
         const data = {
             king: { title: "大自在王佛讚頌", content: "【大自在王佛讚頌】\n大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界、精神界之一如。法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。" },
-            nine: { title: "九字禪", content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義。在實相上，為自覺自性、自救自度。\n本師：本性，即自性，即佛性，即法性。\n大：體、相、智、德、理、事、能、用、時、空，與法界同一理量。故曰大。\n自在：萬法拘束不得，圓融精神與物質世界，無礙解脫自在。\n王：一切佛之自性法身。法界之最高主宰，萬法由之而生。\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿。" },
+            nine: { title: "九字禪", content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義，是眾生向佛至心皈依信順的話。\n本師：本性，即自性，即佛性，即法性。法性就是諸佛法身之總理體，眾生佛性之本元，即 大自在王佛，故稱本師。\n大：體、相、智、德、理、事、能、用、時、空，與法界同一理量。故名大。\n自在：萬法拘束不得，圓融精神與物質世界，故無礙解脫自在，自證常樂我淨之境界。\n王：一切佛之自性法身，不假他修，而本性具足萬法與法界同理同量。\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。" },
             tenOne: { title: "十大一如", content: "【十大一如】\n體大：心物一如。相大：自他一如。智大：理事一如。德大：慈悲一如。理大：萬法一如。事大：福慧一如。能大：質能一如。用大：顯隱一如。時大：三世一如。空大：大小一如。" },
-            tenHeart: { title: "十無量相應心品", content: "【十無量相應心品】\n一、慈悲心：大慈大悲度眾生。\n二、平等心：眾生佛性本平等。\n三、捨離心：捨離三界貪瞋癡。\n四、精進心：萬法唯心常精進。\n五、歡喜心：得大自在心歡喜。\n六、謙和心：心同法界眾和合。\n七、報恩心：飲水思源銘心田。\n八、法忍心：無生法忍入佛地。\n九、無畏心：萬德莊嚴大無畏。\n十、圓覺心：常樂我淨法身圓。" },
+            tenHeart: { title: "十無量相應心品", content: "【十無量相應心品】\n一、慈悲心：大慈大悲度眾生，拔苦與樂菩薩行。\n二、平等心：眾生佛性本平等，三世十方一心圓。\n三、捨離心：捨離三界貪瞋癡，頓入解脫自在門。\n四、精進心：萬法唯心常精進，法輪常轉是佛心。\n五、歡喜心：得大自在心歡喜，隨緣度眾樂無邊。\n六、謙和心：心同法界眾和合，萬法圓通人天師。\n七、報恩心：佛師父母眾生恩，飲水思源銘心田。\n八、法忍心：無生法忍入佛地，全憑正道破魔關。\n九、無畏心：無縛無著真解脫，萬德莊嚴大無畏。\n十、圓覺心：十大一如福慧全，常樂我淨法身圓。" },
             fiveTreasures: { 
                 title: "皈依五寶", 
                 content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：和合之義，僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶即具足。" 
@@ -276,7 +273,6 @@
         };
 
         const synth = window.speechSynthesis;
-        let currentUtterance = null;
         let isLooping = false;
         let currentId = '';
         let isSecondRound = false;
@@ -312,29 +308,14 @@
             document.getElementById('content-page').style.display = 'none';
         }
 
-        // 核心修正：播放/恢復 邏輯
         function handlePlay() {
-            if (synth.paused) {
-                // 如果是暫停狀態，嘗試恢復
-                synth.resume();
-                
-                // 補償機制：如果 resume 失敗（常見於 iOS 或暫停過久），強制重啟
-                setTimeout(() => {
-                    if (synth.paused && synth.speaking) {
-                        console.log("Resume failed, restarting utterance...");
-                        startSpeaking(isSecondRound);
-                    }
-                }, 300);
-                
-                updateButtons(true);
-            } else {
-                // 如果不是暫停（是完全停止或新開始），則啟動新播放
+            if (!synth.speaking) {
                 startSpeaking(false);
             }
         }
 
         function startSpeaking(roundTwo) {
-            synth.cancel(); // 清空所有待播清單
+            synth.cancel(); 
             isLooping = true;
             isSecondRound = roundTwo;
             
@@ -348,65 +329,34 @@
                 }
             }
 
-            // 讀音修正
+            // 讀音修正邏輯
             let textToRead = originalText.replace(/佛乘宗/g, "佛盛宗");
             if (currentId === 'preface') {
                 textToRead = textToRead.replace(/實相/g, "實像");
             }
 
-            currentUtterance = new SpeechSynthesisUtterance(textToRead);
-            currentUtterance.lang = 'zh-TW';
-            currentUtterance.rate = 0.88; 
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.88; 
             
-            currentUtterance.onend = function() {
-                // 只有在循環開啟的情況下才繼續
+            utterance.onend = function() {
                 if (isLooping) {
                     startSpeaking(true);
-                } else {
-                    updateButtons(false);
                 }
             };
 
-            currentUtterance.onerror = function(event) {
-                console.error("Speech Error:", event);
-                // 發生錯誤時嘗試重設按鈕
-                updateButtons(false);
-            };
-
-            synth.speak(currentUtterance);
-            updateButtons(true);
-        }
-
-        function pause() {
-            if (synth.speaking && !synth.paused) {
-                synth.pause();
-                updateButtons(false);
-            }
+            synth.speak(utterance);
         }
 
         function stop() {
             isLooping = false;
             isSecondRound = false;
             synth.cancel(); 
-            updateButtons(false);
         }
 
-        function updateButtons(isPlaying) {
-            const playBtn = document.getElementById('playBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            if (isPlaying) {
-                playBtn.classList.add('hidden');
-                pauseBtn.classList.remove('hidden');
-            } else {
-                playBtn.classList.remove('hidden');
-                pauseBtn.classList.add('hidden');
-            }
-        }
-
-        // 定期檢查維持背景活躍
+        // 心跳機制保持背景活躍
         setInterval(() => {
-            if (synth.speaking && !synth.paused) {
-                // 這是為了防止某些移動端瀏覽器自動進入休眠
+            if (synth.speaking) {
                 window.speechSynthesis.pause();
                 window.speechSynthesis.resume();
             }
