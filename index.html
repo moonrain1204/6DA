@@ -106,7 +106,6 @@
             gap: 15px;
             margin-bottom: 25px;
             width: 100%;
-            min-height: 50px;
         }
         .controls button {
             flex: 1; 
@@ -221,7 +220,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.1.6</span>
+            <span class="version-header">Version 1.1.7</span>
         </header>
         <div class="menu-grid">
             <div id="btn-king" class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
@@ -275,8 +274,8 @@
         const synth = window.speechSynthesis;
         let isLooping = false;
         let currentId = '';
-        let speechQueue = [];
-        let queueIndex = 0;
+        let chunks = [];
+        let chunkIndex = 0;
 
         function toggleTheme() {
             const body = document.body;
@@ -309,59 +308,46 @@
         }
 
         function handlePlay() {
-            stop(); // 先徹底清空之前的狀態
+            stop();
             isLooping = true;
-            prepareAndPlay();
+            
+            let text = data[currentId].content;
+            // 讀音處理
+            text = text.replace(/佛乘宗/g, "佛盛宗");
+            if (currentId === 'preface') text = text.replace(/實相/g, "實像");
+            if (currentId === 'tenHeart') text = text.replace(/[一二三四五六七八九十]、/g, "");
+
+            // 極致切分：利用標點與換行，確保每段語音極短
+            chunks = text.split(/[，。；：\n、]/).filter(s => s.trim().length > 0);
+            chunkIndex = 0;
+            
+            speakChunks();
         }
 
-        function prepareAndPlay() {
+        function speakChunks() {
             if (!isLooping) return;
 
-            let originalText = data[currentId].content;
-            
-            // 讀音修正
-            let processedText = originalText.replace(/佛乘宗/g, "佛盛宗");
-            if (currentId === 'preface') {
-                processedText = processedText.replace(/實相/g, "實像");
-            }
-            if (currentId === 'tenHeart') {
-                processedText = processedText.replace(/[一二三四五六七八九十]、/g, "");
+            // 循環邏輯：如果播完最後一節，歸零重新開始
+            if (chunkIndex >= chunks.length) {
+                chunkIndex = 0;
             }
 
-            // 核心修正：將長文切碎成句子隊列，防止瀏覽器超時
-            // 依據標點符號切分：，。；、\n
-            speechQueue = processedText.split(/[，。；\n]/).filter(t => t.trim().length > 0);
-            queueIndex = 0;
-            
-            playNextChunk();
-        }
-
-        function playNextChunk() {
-            if (!isLooping) return;
-
-            // 如果這一輪播完了，重頭開始（實現持續循環）
-            if (queueIndex >= speechQueue.length) {
-                queueIndex = 0;
-                setTimeout(playNextChunk, 800); 
-                return;
-            }
-
-            const chunk = speechQueue[queueIndex];
-            const utterance = new SpeechSynthesisUtterance(chunk);
+            const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
             utterance.lang = 'zh-TW';
-            utterance.rate = 0.88;
+            utterance.rate = 0.9;
 
             utterance.onend = () => {
-                queueIndex++;
-                playNextChunk();
+                if (isLooping) {
+                    chunkIndex++;
+                    // 這裡給予一個極短的延遲，讓瀏覽器主執行緒有機會呼吸，防止堵塞
+                    setTimeout(speakChunks, 50);
+                }
             };
 
             utterance.onerror = (e) => {
-                console.error("Speech Error:", e);
-                // 發生錯誤時嘗試跳過該句繼續
+                console.log("Speech engine error, restarting chunk...", e);
                 if (isLooping) {
-                    queueIndex++;
-                    setTimeout(playNextChunk, 500);
+                    setTimeout(speakChunks, 300);
                 }
             };
 
@@ -370,27 +356,29 @@
 
         function stop() {
             isLooping = false;
-            queueIndex = 0;
-            speechQueue = [];
-            synth.cancel(); 
+            synth.cancel();
+            chunkIndex = 0;
+            chunks = [];
         }
 
-        // 強力心跳機制：每 5 秒強制恢復，防止移動端休眠
+        // 強力喚醒保險：iOS 專用
+        // 每 3 秒檢查一次，如果應該播放卻沒在說話，強制重啟引擎
+        setInterval(() => {
+            if (isLooping && !synth.speaking) {
+                console.warn("Auto-restart triggered.");
+                synth.cancel();
+                speakChunks();
+            }
+        }, 3000);
+
+        // 背景防斷機制：持續讓語音物件維持微量活動
         setInterval(() => {
             if (isLooping && synth.speaking) {
+                // 輕微觸碰 pause/resume 是業界公認維持 Chrome 背景語音不被殺掉的 Trick
                 synth.pause();
                 synth.resume();
             }
-        }, 5000);
-
-        // 如果點擊了播放但系統一直沒出聲，自動觸發一次重試
-        setInterval(() => {
-            if (isLooping && !synth.speaking && speechQueue.length > 0) {
-                console.log("Detected silent loop, restarting...");
-                playNextChunk();
-            }
-        }, 10000);
-
+        }, 8000);
     </script>
 </body>
 </html>
