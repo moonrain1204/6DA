@@ -78,6 +78,23 @@
         }
         .menu-item.visited { background-color: var(--visited-color); color: white; border-color: transparent; }
 
+        /* 新增首頁播放控制區 */
+        .home-controls {
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .time-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--gold);
+            line-height: 1.6;
+        }
+
         #content-page { display: none; width: 100%; max-width: 800px; padding: 20px 15px; }
         
         .content-body {
@@ -93,7 +110,6 @@
             text-align: justify;
         }
         
-        /* 懸掛縮進設定 */
         .indent-box {
             display: block;
             padding-left: 4.5em; 
@@ -115,7 +131,7 @@
             gap: 15px;
             width: 100%;
         }
-        .controls button {
+        .controls button, .home-controls button {
             flex: 1; 
             max-width: 180px;
             padding: 12px 0;
@@ -123,11 +139,12 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             font-weight: bold;
+            margin: 0 5px;
         }
         .btn-play { background-color: #2e7d32; color: white; }
         .btn-stop { background-color: #c62828; color: white; }
@@ -193,18 +210,30 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.4.4 (Mixed Audio Formats)</span>
+            <span class="version-header">Version 1.5.0 (Auto Sequence Play)</span>
         </header>
+        
         <div class="menu-grid">
-            <div class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
-            <div class="menu-item" onclick="showPage('nine', this)">九字禪</div>
-            <div class="menu-item" onclick="showPage('tenOne', this)">十大一如</div>
-            <div class="menu-item" onclick="showPage('tenHeart', this)">十無量相應心品</div>
-            <div class="menu-item" onclick="showPage('fiveTreasures', this)">皈依五寶</div>
-            <div class="menu-item" onclick="showPage('repentance', this)">禮佛拜懺</div>
-            <div class="menu-item" onclick="showPage('rules', this)">門規與密囑</div>
-            <div class="menu-item" onclick="showPage('preface', this)">佛乘宗法要序</div>
+            <div id="item-king" class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
+            <div id="item-nine" class="menu-item" onclick="showPage('nine', this)">九字禪</div>
+            <div id="item-tenOne" class="menu-item" onclick="showPage('tenOne', this)">十大一如</div>
+            <div id="item-tenHeart" class="menu-item" onclick="showPage('tenHeart', this)">十無量相應心品</div>
+            <div id="item-fiveTreasures" class="menu-item" onclick="showPage('fiveTreasures', this)">皈依五寶</div>
+            <div id="item-repentance" class="menu-item" onclick="showPage('repentance', this)">禮佛拜懺</div>
+            <div id="item-rules" class="menu-item" onclick="showPage('rules', this)">門規與密囑</div>
+            <div id="item-preface" class="menu-item" onclick="showPage('preface', this)">佛乘宗法要序</div>
         </div>
+
+        <div class="home-controls">
+            <button id="homePlayAllBtn" class="btn-play" onclick="startSequencePlay()">▶ 全部連續播放</button>
+            <button id="homeStopBtn" class="btn-stop" onclick="stopSequencePlay()">⏹ 停止播放</button>
+            <div id="sequence-status" style="margin-top:10px; font-weight:bold; color:var(--gold)"></div>
+            <div class="time-info">
+                <div>總計所需時間：<span id="total-duration">-- 分 -- 秒</span></div>
+                <div>播放完畢預計時間：<span id="end-time">--:--</span></div>
+            </div>
+        </div>
+
         <footer>福慧增長 早證菩提</footer>
     </div>
 
@@ -215,50 +244,19 @@
                 <button id="playBtn" class="btn-play" onclick="handlePlay()">▶ 播放錄音</button>
                 <button id="stopBtn" class="btn-stop" onclick="handleStop()">⏹ 停止</button>
             </div>
-            <div id="audio-status">循環播放模式已啟動</div>
+            <div id="audio-status"></div>
         </div>
         <div id="page-content" class="content-body"></div>
         <button class="btn-back" onclick="goHome()">回首頁</button>
         <footer style="position: static;">福慧增長 早證菩提</footer>
     </div>
 
-    <audio id="mainAudio" loop></audio>
+    <audio id="mainAudio"></audio>
 
     <script>
-        function getHeartContent() {
-            const list = [
-                "一、慈悲心：大慈大悲度眾生，拔苦與樂菩薩行。",
-                "二、平等心：眾生佛性本平等，三世十方一心圓。",
-                "三、捨離心：捨離三界貪瞋癡，頓入解脫自在門。",
-                "四、精進心：萬法唯心常精進，法輪常轉是佛心。",
-                "五、歡喜心：得大自在心歡喜，隨緣度眾樂無邊。",
-                "六、謙和心：心同法界眾和合，萬法圓通人天師。",
-                "七、報恩心：佛師父母眾生恩，飲水思源銘心田。",
-                "八、法忍心：無生法忍入佛地，全憑正道開魔關。",
-                "九、無畏心：無縛無著真解脫，萬德莊嚴大無畏。",
-                "十、圓覺心：十大一如福慧全，常樂我淨法身圓。"
-            ];
-            return list.map(item => `<span class="indent-box">${item}</span>`).join('');
-        }
-
-        function getRulesContent() {
-            const rules = [
-                "第一條：尊師重道，護持五寶，圓修十度，誓證佛果。",
-                "第二條：慈悲平等，普度眾生，諸惡莫作，眾善奉行。",
-                "第三條：自立活命，奉獻公益，群己和協，無我為人。",
-                "第四條：遵行門規，光大本門，如有故違，眾同棄之。"
-            ];
-            const orders = [
-                "第一項：每月將收入一部分捐獻本門，作弘法利生之用。",
-                "第二項：凡本門修行密法不得超傳，除本門承傳弟子外，不得傳授。"
-            ];
-            let html = '<strong style="color:var(--gold)">【門規】</strong><br><br>';
-            html += rules.map(r => `<span class="indent-box">${r}</span>`).join('');
-            html += '<br><strong style="color:var(--gold)">【密囑】</strong><br><br>';
-            html += orders.map(o => `<span class="indent-box">${o}</span>`).join('');
-            return html;
-        }
-
+        // 音檔資料設定
+        const audioKeys = ['king', 'nine', 'tenOne', 'tenHeart', 'fiveTreasures', 'repentance', 'rules', 'preface'];
+        
         const data = {
             king: { title: "大自在王佛讚頌", file: "大自在王佛讚頌.wav", isHtml: false, content: "【大自在王佛讚頌】\n大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界、精神界之一如。法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。" },
             nine: { title: "九字禪", file: "九字禪.wav", isHtml: false, content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義，是眾生向佛至心皈依信順的話。\n\n本師：本性，即自性，即佛性，即法性。法性就是諸佛法身之總理體，眾生佛性之本元，即 大自在王佛，故稱本師。\n\n大：體（性）、相、智、德、理、事、能、用、時、空，與法界同一理量，故名大。\n\n自在：萬法拘束不得，圓融精神與物質世界，故無礙解脫自在，自證常樂我淨之境界。\n\n王：一切佛之自性法身，不假他修，而本性具足萬法與法界同理同量。\n\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。" },
@@ -267,41 +265,131 @@
             fiveTreasures: { title: "皈依五寶", file: "皈依五寶.wav", isHtml: false, content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶應具足。" },
             repentance: { title: "禮佛拜懺文", file: "禮佛拜懺文.wav", isHtml: false, content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子○○○無始劫來，因貪偵癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" },
             rules: { title: "門規與密囑", file: "門規.wav", isHtml: true, content: getRulesContent() },
-            preface: { 
-                title: "佛乘宗法要序", 
-                file: "佛乘宗法要序.mp3", 
-                isHtml: false, 
-                content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果徹因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛唯心極樂極土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
+            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果徹因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" }
+        };
+
+        const audio = document.getElementById('mainAudio');
+        let currentId = '';
+        let isSequencePlaying = false;
+        let sequenceIndex = 0;
+
+        // 初始化時間計算
+        function initTimeCalculations() {
+            let totalSeconds = 0;
+            let loadedCount = 0;
+
+            audioKeys.forEach(key => {
+                const tempAudio = new Audio(encodeURIComponent(data[key].file));
+                tempAudio.addEventListener('loadedmetadata', () => {
+                    totalSeconds += tempAudio.duration;
+                    loadedCount++;
+                    if (loadedCount === audioKeys.length) {
+                        updateUI(totalSeconds);
+                    }
+                });
+                // 處理可能的加載失敗
+                tempAudio.addEventListener('error', () => {
+                    loadedCount++;
+                    if (loadedCount === audioKeys.length) updateUI(totalSeconds);
+                });
+            });
+        }
+
+        function updateUI(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = Math.floor(totalSeconds % 60);
+            document.getElementById('total-duration').innerText = `${mins} 分 ${secs} 秒`;
+            
+            const now = new Date();
+            const end = new Date(now.getTime() + totalSeconds * 1000);
+            const endH = end.getHours().toString().padStart(2, '0');
+            const endM = end.getMinutes().toString().padStart(2, '0');
+            document.getElementById('end-time').innerText = `${endH}:${endM}`;
+        }
+
+        // 連續播放邏輯
+        function startSequencePlay() {
+            isSequencePlaying = true;
+            sequenceIndex = 0;
+            audio.loop = false; // 連續播放時關閉單曲循環
+            playNextInSequence();
+            document.getElementById('homePlayAllBtn').innerText = "● 播放中...";
+            document.getElementById('sequence-status').innerText = "正在依序播放...";
+        }
+
+        function playNextInSequence() {
+            if (!isSequencePlaying || sequenceIndex >= audioKeys.length) {
+                stopSequencePlay();
+                return;
+            }
+
+            const currentKey = audioKeys[sequenceIndex];
+            currentId = currentKey;
+            
+            // 更新首頁 visited 視覺效果
+            const item = document.getElementById('item-' + currentKey);
+            if(item) item.classList.add('visited');
+
+            audio.src = encodeURIComponent(data[currentKey].file);
+            audio.play().catch(e => {
+                console.error("播放失敗:", e);
+                sequenceIndex++;
+                playNextInSequence();
+            });
+
+            document.getElementById('sequence-status').innerText = `正在播放：${data[currentKey].title}`;
+            
+            sequenceIndex++;
+        }
+
+        // 音訊結束監聽 (用於連播)
+        audio.onended = function() {
+            if (isSequencePlaying) {
+                playNextInSequence();
+            } else if (audio.loop) {
+                // 如果是單曲循環，則不觸發連播邏輯
             }
         };
 
-        let currentId = '';
-        const audio = document.getElementById('mainAudio');
+        function stopSequencePlay() {
+            isSequencePlaying = false;
+            audio.pause();
+            audio.currentTime = 0;
+            document.getElementById('homePlayAllBtn').innerText = "▶ 全部連續播放";
+            document.getElementById('sequence-status').innerText = "";
+        }
+
+        // --- 原有函數 ---
+        function getHeartContent() {
+            const list = ["一、慈悲心：大慈大悲度眾生，拔苦與樂菩薩行。", "二、平等心：眾生佛性本平等，三世十方一心圓。", "三、捨離心：捨離三界貪瞋癡，頓入解脫自在門。", "四、精進心：萬法唯心常精進，法輪常轉是佛心。", "五、歡喜心：得大自在心歡喜，隨緣度眾樂無邊。", "六、謙和心：心同法界眾和合，萬法圓通人天師。", "七、報恩心：佛師父母眾生恩，飲水思源銘心田。", "八、法忍心：無生法忍入佛地，全憑正道開魔關。", "九、無畏心：無縛無著真解脫，萬德莊嚴大無畏。", "十、圓覺心：十大一如福慧全，常樂我淨法身圓。"];
+            return list.map(item => `<span class="indent-box">${item}</span>`).join('');
+        }
+
+        function getRulesContent() {
+            const rules = ["第一條：尊師重道，護持五寶，圓修十度，誓證佛果。", "第二條：慈悲平等，普度眾生，諸惡莫作，眾善奉行。", "第三條：自立活命，奉獻公益，群己和協，無我為人。", "第四條：遵行門規，光大本門，如有故違，眾同棄之。"];
+            const orders = ["第一項：每月將收入一部分捐獻本門，作弘法利生之用。", "第二項：凡本門修行密法不得超傳，除本門承傳弟子外，不得傳授。"];
+            let html = '<strong style="color:var(--gold)">【門規】</strong><br><br>' + rules.map(r => `<span class="indent-box">${r}</span>`).join('') + '<br><strong style="color:var(--gold)">【密囑】</strong><br><br>' + orders.map(o => `<span class="indent-box">${o}</span>`).join('');
+            return html;
+        }
 
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             document.getElementById('themeToggle').innerText = document.body.classList.contains('light-mode') ? '🕯' : '💡';
         }
 
-        function toggleQuote(show) {
-            document.getElementById('quote-modal').style.display = show ? 'flex' : 'none';
-        }
+        function toggleQuote(show) { document.getElementById('quote-modal').style.display = show ? 'flex' : 'none'; }
 
         function showPage(id, element) {
+            stopSequencePlay(); // 切換到單頁時停止連播
             currentId = id;
             if (element) element.classList.add('visited');
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('content-page').style.display = 'block';
             document.getElementById('page-title-display').innerText = data[id].title;
-            
-            const contentEl = document.getElementById('page-content');
-            if (data[id].isHtml) {
-                contentEl.innerHTML = data[id].content;
-            } else {
-                contentEl.innerText = data[id].content;
-            }
-            
-            audio.src = encodeURIComponent(data[id].file); 
+            document.getElementById('page-content').innerHTML = data[id].isHtml ? data[id].content : data[id].content;
+            audio.src = encodeURIComponent(data[id].file);
+            audio.loop = true; // 單頁模式開啟單曲循環
+            document.getElementById('audio-status').innerText = "單曲循環播放模式已啟動";
             handleStop();
             window.scrollTo(0,0);
         }
@@ -310,12 +398,11 @@
             handleStop();
             document.getElementById('home-page').style.display = 'flex';
             document.getElementById('content-page').style.display = 'none';
+            initTimeCalculations(); // 回首頁時重新計算預計時間
         }
 
         function handlePlay() {
-            audio.play().catch(e => {
-                alert("找不到音檔： " + data[currentId].file);
-            });
+            audio.play().catch(e => alert("找不到音檔：" + data[currentId].file));
             document.getElementById('playBtn').innerText = "● 播放中";
         }
 
@@ -324,6 +411,9 @@
             audio.currentTime = 0;
             document.getElementById('playBtn').innerText = "▶ 播放錄音";
         }
+
+        // 初始化
+        window.onload = initTimeCalculations;
     </script>
 </body>
 </html>
