@@ -11,7 +11,8 @@
             --card-bg: #2d2d2d;
             --text-color: #e0e0e0;
             --btn-back-bg: #546e7a;
-            --visited-color: #2e7d32; 
+            --visited-color: #2e7d32;
+            --blue-accent: #1976d2;
         }
 
         body.light-mode {
@@ -20,7 +21,7 @@
             --text-color: #001f3f; 
             --gold: #b8860b;
             --btn-back-bg: #a1b0b8;
-            --visited-color: #8da38e; 
+            --visited-color: #8da38e;
         }
 
         * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
@@ -78,8 +79,9 @@
         }
         .menu-item.visited { background-color: var(--visited-color); color: white; border-color: transparent; }
 
+        /* 首頁控制區 */
         .home-controls {
-            width: 90%;
+            width: 95%;
             max-width: 800px;
             padding: 20px;
             background: rgba(0,0,0,0.2);
@@ -91,7 +93,35 @@
             margin-top: 15px;
             font-size: 0.9rem;
             color: var(--gold);
-            line-height: 1.6;
+            line-height: 1.8;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 5px;
+        }
+
+        /* 連播開關樣式 */
+        .toggle-container {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-toggle {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid #666;
+            background: #444;
+            color: #ccc;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-toggle.active {
+            background: var(--blue-accent);
+            border-color: #90caf9;
+            color: white;
+            box-shadow: 0 0 10px rgba(25, 118, 210, 0.5);
         }
 
         #content-page { display: none; width: 100%; max-width: 800px; padding: 20px 15px; }
@@ -130,7 +160,7 @@
             gap: 15px;
             width: 100%;
         }
-        .controls button, .home-controls button {
+        .controls button, .home-controls button:not(.btn-toggle) {
             flex: 1; 
             max-width: 180px;
             padding: 12px 0;
@@ -209,7 +239,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.6.0 (Background Sequential Play)</span>
+            <span class="version-header">Version 1.7.0 (Double Loop & Multi-Time)</span>
         </header>
         
         <div class="menu-grid">
@@ -226,10 +256,19 @@
         <div class="home-controls">
             <button id="homePlayAllBtn" class="btn-play" onclick="startSequencePlay()">▶ 全部連續播放</button>
             <button id="homeStopBtn" class="btn-stop" onclick="stopSequencePlay()">⏹ 停止播放</button>
+            
+            <div class="toggle-container">
+                <span>連播功能開關：</span>
+                <button id="loopToggle" class="btn-toggle" onclick="toggleLoopMode()">OFF</button>
+            </div>
+
             <div id="sequence-status" style="margin-top:10px; font-weight:bold; color:var(--gold)"></div>
+            
             <div class="time-info">
-                <div>總計所需時間：<span id="total-duration">-- 分 -- 秒</span></div>
-                <div>播放完畢預計時間：<span id="end-time">--:--</span></div>
+                <div>【數據計算】</div>
+                <div>總計所需時間（單輪）：<span id="total-duration">-- 分 -- 秒</span></div>
+                <div>第一輪播放完畢：<span id="end-time-1">--:--</span></div>
+                <div id="second-round-box" style="opacity: 0.5;">第二輪播放完畢：<span id="end-time-2">--:--</span></div>
             </div>
         </div>
 
@@ -254,82 +293,98 @@
 
     <script>
         const audioKeys = ['king', 'nine', 'tenOne', 'tenHeart', 'fiveTreasures', 'repentance', 'rules', 'preface'];
+        let singleRoundSeconds = 0;
+        let isLoopEnabled = false; // 連播開關狀態
         
         const data = {
             king: { title: "大自在王佛讚頌", file: "大自在王佛讚頌.wav", isHtml: false, content: "【大自在王佛讚頌】\n大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界、精神界之一如。法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。" },
-            nine: { title: "九字禪", file: "九字禪.wav", isHtml: false, content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義，是眾生向佛至心皈依信順的話。\n\n本師：本性，即自性，即佛性，即法性。法性就是諸佛法身之總理體，眾生佛性之本元，即 大自在王佛，故稱本師。\n\n大：體（性）、相、智、德、理、事、能、用、時、空，與法界同一理量，故名大。\n\n自在：萬法拘束不得，圓融精神與物質世界，故無礙解脫自在，自證常樂我淨之境界。\n\n王：一切佛之自性法身，不假他修，而本性具足萬法與法界同理同量。\n\n佛：證悟法界萬有一切事理實實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。" },
+            nine: { title: "九字禪", file: "九字禪.wav", isHtml: false, content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義，是眾生向佛至心皈依信順的話。\n\n本師：本性，即自性，即佛性，即法性。法性就是諸佛法身之總理體，眾生佛性之本元，即 大自在王佛，故稱本師。\n\n大：體（性）、相、智、德、理、事、能、用、時、空，與法界同一理量，故名大。\n\n自在：萬法拘束不得，圓融精神與物質世界，故無礙解脫自在，自證常樂我淨之境界。\n\n王：一切佛之自性法身，不假他修，而本性具足萬法與法界同理同量。\n\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。" },
             tenOne: { title: "十大一如", file: "十大一如.wav", isHtml: false, content: "【十大一如】\n體大：心物一如，空有一如，身心不二，本性即為佛性。\n\n相大：統一有色、無色之法界萬相。亦即一合相之境界。自他一如故。\n\n智大：智慧心能，法界萬有，過去、現在、未來之一切理事無所不知。\n\n德大：即一合相之德，普度眾生之願行。自度度他。以無緣大慈、同體大悲、圓度法界眾生。\n\n理大：統法界無量法門之理則、法要。\n\n事大：世出世法之圓融，無量時空中轉十度萬行之大法輪，即普度眾生之行相。\n\n能大：圓通無量神通法門，身能、心能、宇宙能，一為無量，無量為一，一多圓融，質能互變，周遍法界，無所不能。\n\n用大：體用、動靜、隱顯，理事一如，法界無盡，十方三世圓滿一心轉大法輪。\n\n時大：過去、現在、未來三世一如，短劫入長劫，長劫入短劫，凡夫因變動而計量，為時空之虛妄分別有。\n\n空大：一多大小無礙圓融，凡夫因妄執形體變易相，而生空有之計量。" },
             tenHeart: { title: "十無量相應心品", file: "十無量相應心品.wav", isHtml: true, content: getHeartContent() },
             fiveTreasures: { title: "皈依五寶", file: "皈依五寶.wav", isHtml: false, content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶應具足。" },
             repentance: { title: "禮佛拜懺文", file: "禮佛拜懺文.wav", isHtml: false, content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子○○○無始劫來，因貪偵癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" },
             rules: { title: "門規", file: "門規.wav", isHtml: true, content: getRulesContent() },
-            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n（內容省略...與之前一致）" }
+            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果徹因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" }
         };
 
         const audio = document.getElementById('mainAudio');
-        let currentId = '';
         let isSequencePlaying = false;
         let sequenceIndex = 0;
 
         function initTimeCalculations() {
-            let totalSeconds = 0;
-            let loadedCount = 0;
+            let total = 0;
+            let loaded = 0;
             audioKeys.forEach(key => {
-                const tempAudio = new Audio(encodeURIComponent(data[key].file));
-                tempAudio.addEventListener('loadedmetadata', () => {
-                    totalSeconds += tempAudio.duration;
-                    loadedCount++;
-                    if (loadedCount === audioKeys.length) updateUI(totalSeconds);
-                });
-                tempAudio.addEventListener('error', () => {
-                    loadedCount++;
-                    if (loadedCount === audioKeys.length) updateUI(totalSeconds);
+                const t = new Audio(encodeURIComponent(data[key].file));
+                t.addEventListener('loadedmetadata', () => {
+                    total += t.duration;
+                    if (++loaded === audioKeys.length) {
+                        singleRoundSeconds = total;
+                        updateTimeUI();
+                    }
                 });
             });
         }
 
-        function updateUI(totalSeconds) {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = Math.floor(totalSeconds % 60);
+        function updateTimeUI() {
+            const mins = Math.floor(singleRoundSeconds / 60);
+            const secs = Math.floor(singleRoundSeconds % 60);
             document.getElementById('total-duration').innerText = `${mins} 分 ${secs} 秒`;
+            
             const now = new Date();
-            const end = new Date(now.getTime() + totalSeconds * 1000);
-            document.getElementById('end-time').innerText = `${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}`;
+            // 第一輪
+            const end1 = new Date(now.getTime() + singleRoundSeconds * 1000);
+            document.getElementById('end-time-1').innerText = `${end1.getHours().toString().padStart(2, '0')}:${end1.getMinutes().toString().padStart(2, '0')}`;
+            
+            // 第二輪
+            const end2 = new Date(now.getTime() + (singleRoundSeconds * 2) * 1000);
+            document.getElementById('end-time-2').innerText = `${end2.getHours().toString().padStart(2, '0')}:${end2.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        function toggleLoopMode() {
+            isLoopEnabled = !isLoopEnabled;
+            const btn = document.getElementById('loopToggle');
+            const box2 = document.getElementById('second-round-box');
+            if (isLoopEnabled) {
+                btn.innerText = "ON";
+                btn.classList.add('active');
+                box2.style.opacity = "1";
+            } else {
+                btn.innerText = "OFF";
+                btn.classList.remove('active');
+                box2.style.opacity = "0.5";
+            }
         }
 
         function startSequencePlay() {
             isSequencePlaying = true;
             sequenceIndex = 0;
-            audio.loop = false;
-            playNextInSequence();
-            document.getElementById('homePlayAllBtn').innerText = "● 正在連續播放";
-            document.getElementById('sequence-status').innerText = "連續播放中，可點擊上方標題查看內文";
+            playNext();
+            document.getElementById('homePlayAllBtn').innerText = "● 正在播放";
         }
 
-        function playNextInSequence() {
-            if (!isSequencePlaying || sequenceIndex >= audioKeys.length) {
-                stopSequencePlay();
-                return;
+        function playNext() {
+            if (!isSequencePlaying) return;
+            
+            // 如果播完了最後一個
+            if (sequenceIndex >= audioKeys.length) {
+                if (isLoopEnabled) {
+                    sequenceIndex = 0; // 開啟連播開關，重頭開始
+                } else {
+                    stopSequencePlay(); // 關閉連播開關，播完佛乘宗法要序後結束
+                    return;
+                }
             }
-            const currentKey = audioKeys[sequenceIndex];
-            const item = document.getElementById('item-' + currentKey);
-            if(item) item.classList.add('visited');
 
-            audio.src = encodeURIComponent(data[currentKey].file);
-            audio.play().catch(e => {
-                sequenceIndex++;
-                playNextInSequence();
-            });
-
-            document.getElementById('sequence-status').innerText = `正在播放：${data[currentKey].title}`;
+            const key = audioKeys[sequenceIndex];
+            document.getElementById('item-' + key).classList.add('visited');
+            audio.src = encodeURIComponent(data[key].file);
+            audio.play();
+            document.getElementById('sequence-status').innerText = `正在播放：${data[key].title} ${isLoopEnabled ? '(循環模式)' : ''}`;
             sequenceIndex++;
         }
 
-        audio.onended = function() {
-            if (isSequencePlaying) {
-                playNextInSequence();
-            }
-        };
+        audio.onended = playNext;
 
         function stopSequencePlay() {
             isSequencePlaying = false;
@@ -337,20 +392,17 @@
             audio.currentTime = 0;
             document.getElementById('homePlayAllBtn').innerText = "▶ 全部連續播放";
             document.getElementById('sequence-status').innerText = "";
-            document.getElementById('audio-status').innerText = "";
         }
 
-        function showPage(id, element) {
-            currentId = id;
-            if (element) element.classList.add('visited');
+        function showPage(id, el) {
+            if (el) el.classList.add('visited');
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('content-page').style.display = 'block';
             document.getElementById('page-title-display').innerText = data[id].title;
-            document.getElementById('page-content').innerHTML = data[id].content;
+            document.getElementById('page-content').innerHTML = data[id].isHtml ? data[id].content : data[id].content;
             
-            // 如果目前正在連續播放中，進入頁面時不重置音訊，僅顯示狀態
             if (isSequencePlaying) {
-                document.getElementById('audio-status').innerText = "連續播放進行中，單頁播放功能已停用";
+                document.getElementById('audio-status').innerText = "連播進行中...";
                 document.getElementById('page-audio-btns').style.opacity = "0.5";
                 document.getElementById('page-audio-btns').style.pointerEvents = "none";
             } else {
@@ -359,7 +411,9 @@
                 document.getElementById('page-audio-btns').style.pointerEvents = "auto";
                 audio.src = encodeURIComponent(data[id].file);
                 audio.loop = true;
-                handleStop();
+                audio.pause();
+                audio.currentTime = 0;
+                document.getElementById('playBtn').innerText = "▶ 播放錄音";
             }
             window.scrollTo(0,0);
         }
@@ -367,26 +421,13 @@
         function goHome() {
             document.getElementById('home-page').style.display = 'flex';
             document.getElementById('content-page').style.display = 'none';
-            if (!isSequencePlaying) initTimeCalculations();
+            updateTimeUI();
         }
 
-        function handlePlay() {
-            if (isSequencePlaying) return;
-            audio.play();
-            document.getElementById('playBtn').innerText = "● 播放中";
-        }
-
+        function handlePlay() { audio.play(); document.getElementById('playBtn').innerText = "● 播放中"; }
         function handleStop() {
-            if (isSequencePlaying) {
-                stopSequencePlay();
-                // 停止後恢復單頁按鈕功能
-                document.getElementById('page-audio-btns').style.opacity = "1";
-                document.getElementById('page-audio-btns').style.pointerEvents = "auto";
-            } else {
-                audio.pause();
-                audio.currentTime = 0;
-                document.getElementById('playBtn').innerText = "▶ 播放錄音";
-            }
+            if (isSequencePlaying) stopSequencePlay();
+            else { audio.pause(); audio.currentTime = 0; document.getElementById('playBtn').innerText = "▶ 播放錄音"; }
         }
 
         function getHeartContent() {
@@ -404,7 +445,6 @@
             document.body.classList.toggle('light-mode');
             document.getElementById('themeToggle').innerText = document.body.classList.contains('light-mode') ? '🕯' : '💡';
         }
-
         function toggleQuote(show) { document.getElementById('quote-modal').style.display = show ? 'flex' : 'none'; }
 
         window.onload = initTimeCalculations;
