@@ -188,7 +188,16 @@
             cursor: pointer;
         }
 
-        footer { margin-top: auto; padding: 25px; font-size: 0.85rem; opacity: 0.5; text-align: center; color: var(--gold); }
+        footer { 
+            margin-top: auto; 
+            padding: 25px; 
+            font-size: 0.85rem; 
+            opacity: 0.7; 
+            text-align: center; 
+            color: var(--gold); 
+            width: 100%;
+        }
+        .version { display: block; margin-top: 5px; font-size: 0.75rem; color: #888; }
     </style>
 </head>
 <body>
@@ -224,6 +233,10 @@
             <div id="btn-rules" class="menu-item" onclick="showPage('rules', this)">門規與密囑</div>
             <div id="btn-preface" class="menu-item" onclick="showPage('preface', this)">佛乘宗法要序</div>
         </div>
+        <footer>
+            願法界眾生 同證佛果
+            <span class="version">Version 1.1.0</span>
+        </footer>
     </div>
 
     <div id="content-page">
@@ -235,9 +248,11 @@
         </div>
         <div id="page-content" class="content-body"></div>
         <button class="btn-back" onclick="goHome()">回首頁</button>
+        <footer style="position: static;">
+            願法界眾生 同證佛果
+            <span class="version">Version 1.1.0</span>
+        </footer>
     </div>
-
-    <footer>願法界眾生 同證佛果</footer>
 
     <script>
         const data = {
@@ -288,7 +303,7 @@
             document.getElementById('page-title-display').innerText = data[id].title;
             document.getElementById('page-content').innerText = data[id].content;
             window.scrollTo(0,0);
-            stop(); // 切換頁面時徹底停止前一個語音
+            stop(); 
         }
 
         function goHome() {
@@ -298,17 +313,21 @@
         }
 
         function handlePlay() {
-            // 修正：確實檢查暫停狀態並恢復播放
+            // 嘗試使用 resume 恢復播放
             if (synth.paused) {
                 synth.resume();
+                // 某些瀏覽器 resume 後不會立即觸發狀態更新，保險起見再檢查一次
+                if (!synth.speaking) {
+                    startSpeaking(isSecondRound);
+                }
                 updateButtons(true);
-            } else {
+            } else if (!synth.speaking) {
                 startSpeaking(false);
             }
         }
 
         function startSpeaking(roundTwo) {
-            synth.cancel(); // 確保開始新朗讀前清空隊列
+            synth.cancel(); 
             isLooping = true;
             isSecondRound = roundTwo;
             
@@ -322,9 +341,7 @@
                 }
             }
 
-            // 讀音修正：
-            // 1. 佛乘宗 -> 佛盛宗
-            // 2. 實相 -> 實像 (處理 preface 頁面)
+            // 讀音修正
             let textToRead = originalText.replace(/佛乘宗/g, "佛盛宗");
             if (currentId === 'preface') {
                 textToRead = textToRead.replace(/實相/g, "實像");
@@ -335,7 +352,6 @@
             utterance.rate = 0.88; 
             
             utterance.onend = function() {
-                // 只有在非手動停止且標記為循環時才繼續
                 if (isLooping) {
                     startSpeaking(true);
                 } else {
@@ -348,8 +364,8 @@
         }
 
         function pause() {
-            if (synth.speaking) {
-                synth.pause(); // 核心：保留當下進度
+            if (synth.speaking && !synth.paused) {
+                synth.pause();
                 updateButtons(false);
             }
         }
@@ -357,7 +373,7 @@
         function stop() {
             isLooping = false;
             isSecondRound = false;
-            synth.cancel(); // 核心：清空所有進度
+            synth.cancel(); 
             updateButtons(false);
         }
 
@@ -372,6 +388,13 @@
                 pauseBtn.classList.add('hidden');
             }
         }
+
+        // 定期檢查以防止某些瀏覽器語音引擎自動逾時
+        setInterval(() => {
+            if (synth.speaking && !synth.paused) {
+                synth.resume();
+            }
+        }, 10000);
     </script>
 </body>
 </html>
