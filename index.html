@@ -183,7 +183,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <span class="version-header">Version 1.3.7 (Content & Audio Sync)</span>
+            <span class="version-header">Version 1.3.8 (Ten Attributes Finalized)</span>
         </header>
         <div class="menu-grid">
             <div class="menu-item" onclick="showPage('king', this)">大自在王佛讚頌</div>
@@ -229,7 +229,7 @@
             tenOne: { 
                 title: "十大一如", 
                 file: "十大一如.wav", 
-                content: "【十大一如】\n體大：心物一如，空有一如，身心不二，本性即為佛性。\n\n相大：統一有色、無色之法界萬相。亦即一合相之境界。自他一如故。\n\n智大：智慧心能，法界萬有，過去、現在、未來之一切理事無所不知。\n\n德大：即一合相之德，普度眾生之願行。自度度他。以無緣大慈、同體大悲、圓度法界眾生。\n\n理大：統法界無量法門之理則、法要。\n\n事大：世出世法之圓融，無量時空中轉十度萬行之大法輪，即普度眾生之行相。\n\n能大：圓通無量神通法門，身能、心能、宇宙能，一為無量，無量為一，一多圓融，質能互變，周遍法界，無所不能。\n\n用大：體用、動靜、隱顯，理事一如，法界無盡，十方三世圓滿一心轉大法輪。\n\n時大：過去、現在、未來三世一如，短劫入長劫，長劫入短劫，凡夫因變動而計量，時空之虛妄分別有。\n\n空大：一多大小無礙圓融，凡夫因妄執形體變易相，而生空有之計量。" 
+                content: "【十大一如】\n體大：心物一如，空有一如，身心不二，本性即為佛性。\n\n相大：統一有色、無色之法界萬相。亦即一合相之境界。自他一如故。\n\n智大：智慧心能，法界萬有，過去、現在、未來之一切理事無所不知。\n\n德大：即一合相之德，普度眾生之願行。自度度他。以無緣大慈、同體大悲、圓度法界眾生。\n\n理大：統法界無量法門之理則、法要。\n\n事大：世出世法之圓融，無量時空中轉十度萬行之大法輪，即普度眾生之行相。\n\n能大：圓通無量神通法門，身能、心能、宇宙能，一為無量，無量為一，一多圓融，質能互變，周遍法界，無所不能。\n\n用大：體用、動靜、隱顯，理事一如，法界無盡，十方三世圓滿一心轉大法輪。\n\n時大：過去、現在、未來三世一如，短劫入長劫，長劫入短劫，凡夫因變動而計量，為時空之虛妄分別有。\n\n空大：一多大小無礙圓融，凡夫因妄執形體變易相，而生空有之計量。" 
             },
             tenHeart: { 
                 title: "十無量相應心品", 
@@ -254,52 +254,4 @@
             preface: { 
                 title: "佛乘宗法要序", 
                 file: "佛乘宗法要序.wav", 
-                content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由 祖師上下禪師與傳人宗師緣道所立，尊大自在王佛為本門第一代祖師。大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃萬法性之一次發起，故因該果海三界安立，果徹因源三世平等。\n\n本門之法，合之為一佛心，非語言文字之可描述，方便分之，則心理有八大加持，佛教教大乘小乘各宗乘理之精神精華，為凡位菩薩至佛果之途徑；生理有八大階段，為化難治之症，延壽、長春、轉色身為法身之工程，如是心理生理並修，福慧雙圓，即生肉身成佛。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一唯心極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
-            }
-        };
-
-        let currentId = '';
-        const audio = document.getElementById('mainAudio');
-
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            document.getElementById('themeToggle').innerText = document.body.classList.contains('light-mode') ? '🕯' : '💡';
-        }
-
-        function toggleQuote(show) {
-            document.getElementById('quote-modal').style.display = show ? 'flex' : 'none';
-        }
-
-        function showPage(id, element) {
-            currentId = id;
-            if (element) element.classList.add('visited');
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('content-page').style.display = 'block';
-            document.getElementById('page-title-display').innerText = data[id].title;
-            document.getElementById('page-content').innerText = data[id].content;
-            audio.src = data[id].file; 
-            handleStop();
-            window.scrollTo(0,0);
-        }
-
-        function goHome() {
-            handleStop();
-            document.getElementById('home-page').style.display = 'flex';
-            document.getElementById('content-page').style.display = 'none';
-        }
-
-        function handlePlay() {
-            audio.play().catch(e => {
-                alert("找不到音檔： " + data[currentId].file + "\n請確認檔案已正確上傳至 repository 根目錄。");
-            });
-            document.getElementById('playBtn').innerText = "⏸ 播放中";
-        }
-
-        function handleStop() {
-            audio.pause();
-            audio.currentTime = 0;
-            document.getElementById('playBtn').innerText = "▶ 播放錄音";
-        }
-    </script>
-</body>
-</html>
+                content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由 祖師上下禪師與傳人宗師緣道所立，尊大自在王佛為本門第一代祖師。大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃萬法性之一次發起，故因該果海三界安立，果徹因源三世平等。\n\n本門之法，合之為一佛心，非語言文字之可描述，方便分之，則心理有八大加持，佛教教大乘小乘各宗乘理之精神精華，為凡位菩薩至佛果之途徑；生理有八大階段，為化難治之症，延壽、長春、轉色身為法身之工程，如是心理生理並修，福慧雙圓，即生肉身成佛。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福
