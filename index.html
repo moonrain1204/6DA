@@ -192,7 +192,7 @@
             margin-top: auto; 
             padding: 25px; 
             font-size: 0.85rem; 
-            opacity: 0.7; 
+            opacity: 0.8; 
             text-align: center; 
             color: var(--gold); 
             width: 100%;
@@ -234,8 +234,8 @@
             <div id="btn-preface" class="menu-item" onclick="showPage('preface', this)">佛乘宗法要序</div>
         </div>
         <footer>
-            願法界眾生 同證佛果
-            <span class="version">Version 1.1.0</span>
+            福慧增長 早證菩提
+            <span class="version">Version 1.1.2</span>
         </footer>
     </div>
 
@@ -249,15 +249,15 @@
         <div id="page-content" class="content-body"></div>
         <button class="btn-back" onclick="goHome()">回首頁</button>
         <footer style="position: static;">
-            願法界眾生 同證佛果
-            <span class="version">Version 1.1.0</span>
+            福慧增長 早證菩提
+            <span class="version">Version 1.1.2</span>
         </footer>
     </div>
 
     <script>
         const data = {
             king: { title: "大自在王佛讚頌", content: "【大自在王佛讚頌】\n大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界、精神界之一如。法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。" },
-            nine: { title: "九字禪", content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義。\n本師：本性，即自性，即佛性，即法性。\n大：體、相、智、德、理、事、能、用、時、空，與法界同一理量。\n自在：萬法拘束不得，圓融精神與物質世界，無礙解脫自在。\n王：一切佛之自性法身。\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿。" },
+            nine: { title: "九字禪", content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義。在實相上，為自覺自性、自救自度。\n本師：本性，即自性，即佛性，即法性。\n大：體、相、智、德、理、事、能、用、時、空，與法界同一理量。故曰大。\n自在：萬法拘束不得，圓融精神與物質世界，無礙解脫自在。\n王：一切佛之自性法身。法界之最高主宰，萬法由之而生。\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿。" },
             tenOne: { title: "十大一如", content: "【十大一如】\n體大：心物一如。相大：自他一如。智大：理事一如。德大：慈悲一如。理大：萬法一如。事大：福慧一如。能大：質能一如。用大：顯隱一如。時大：三世一如。空大：大小一如。" },
             tenHeart: { title: "十無量相應心品", content: "【十無量相應心品】\n一、慈悲心：大慈大悲度眾生。\n二、平等心：眾生佛性本平等。\n三、捨離心：捨離三界貪瞋癡。\n四、精進心：萬法唯心常精進。\n五、歡喜心：得大自在心歡喜。\n六、謙和心：心同法界眾和合。\n七、報恩心：飲水思源銘心田。\n八、法忍心：無生法忍入佛地。\n九、無畏心：萬德莊嚴大無畏。\n十、圓覺心：常樂我淨法身圓。" },
             fiveTreasures: { 
@@ -271,12 +271,12 @@
             rules: { title: "門規與密囑", content: "【門規】\n第一條：尊師重道，護持五寶。\n第二條：慈悲平等，普度眾生。\n第三條：自立活命，奉獻公益。\n第四條：遵行門規，光大本門。\n\n【密囑】\n第一項：每月將收入一部分捐獻。\n第二項：修行密法不得超傳。" },
             preface: { 
                 title: "佛乘宗法要序", 
-                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛唯心極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
+                content: "【佛乘宗法要序】\n\n宗師緣道上人羅雷居士書於台灣\n\n佛曆二五三三年佛誕日\n\n佛乘宗為頓入大自在實相理體，圓証一心，即生肉身成佛之圓頓法門，由　祖師上妙下空禪師與傳人　宗師緣道所立，尊大自在王佛為本門第一代祖師。　大自在王佛為眾生佛性之本元，諸佛法身之總理體，統物理界精神界之一如，法界萬有皆由之變易生化而然，其身心體、相、智、德、理、事、能、用、時、空之十大一如，與法界同一理量。蓋心物非二，空有一如，物質不滅故能量不滅，精神亦不滅；心物交感，質能互變，因緣果報變易生化之理事，一法之生乃法性之一大緣起，故因賅果海三界安立，果澈因緣三世平等。\n\n本門之法，合之為一佛心，非語言文字之可詮述，方便分之，則心理有八大加行，集佛教大小乘各宗義理之精華，為凡位菩薩至佛果之理路；生理九段禪功，為能治百病肉身成佛之妙行。眾生自性之體、相、智、德、理、事、能、用、時、空之十大，與大自在王佛之十大，本為同一理量，為無明惑業所障故，致未能顯用。　有緣之人如以相應真心念　大自在王佛一聲聖號，其功德等於以無量劫之時間念法界無量佛之聖號相等，故一心相應即能頓消無量劫自身所造之罪業。\n\n際此末法時期，魔強道衰，我祖師為應此一時節因緣，故明定以佛教世間化，佛學科學化，佛法生活化，佛制現代化四大原則，將佛法與中華文化及現代倫理、民主、科學之理事相融合，以方便弘法利生。\n\n修行用功，重在信心堅定、理事圓融、精進不懈、解行相應，如能與祖師大自在王佛一念相應，則當下戒定慧具足，貪瞋痴三毒永淨；每日廿六時中，行住坐臥皆安住自性大自在佛位中，究竟解脫；一切無明業障，自會隨緣不變，不變隨緣而得大自在。依之修行定可福慧圓滿，圓証佛果，而作人天之師，心淨，則眾生業淨，眾生界淨，當下合十法界為一大自在王佛開山極樂淨土，常寂光中自他不二，空有一如，常樂我淨，一為無量，無量為一，一多圓融，法輪常轉，是以萬法圓通，萬德莊嚴，此是菩薩行處住處，謹為之序。" 
             }
         };
 
         const synth = window.speechSynthesis;
-        let utterance = null;
+        let currentUtterance = null;
         let isLooping = false;
         let currentId = '';
         let isSecondRound = false;
@@ -312,22 +312,29 @@
             document.getElementById('content-page').style.display = 'none';
         }
 
+        // 核心修正：播放/恢復 邏輯
         function handlePlay() {
-            // 嘗試使用 resume 恢復播放
             if (synth.paused) {
+                // 如果是暫停狀態，嘗試恢復
                 synth.resume();
-                // 某些瀏覽器 resume 後不會立即觸發狀態更新，保險起見再檢查一次
-                if (!synth.speaking) {
-                    startSpeaking(isSecondRound);
-                }
+                
+                // 補償機制：如果 resume 失敗（常見於 iOS 或暫停過久），強制重啟
+                setTimeout(() => {
+                    if (synth.paused && synth.speaking) {
+                        console.log("Resume failed, restarting utterance...");
+                        startSpeaking(isSecondRound);
+                    }
+                }, 300);
+                
                 updateButtons(true);
-            } else if (!synth.speaking) {
+            } else {
+                // 如果不是暫停（是完全停止或新開始），則啟動新播放
                 startSpeaking(false);
             }
         }
 
         function startSpeaking(roundTwo) {
-            synth.cancel(); 
+            synth.cancel(); // 清空所有待播清單
             isLooping = true;
             isSecondRound = roundTwo;
             
@@ -347,11 +354,12 @@
                 textToRead = textToRead.replace(/實相/g, "實像");
             }
 
-            utterance = new SpeechSynthesisUtterance(textToRead);
-            utterance.lang = 'zh-TW';
-            utterance.rate = 0.88; 
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+            currentUtterance.lang = 'zh-TW';
+            currentUtterance.rate = 0.88; 
             
-            utterance.onend = function() {
+            currentUtterance.onend = function() {
+                // 只有在循環開啟的情況下才繼續
                 if (isLooping) {
                     startSpeaking(true);
                 } else {
@@ -359,7 +367,13 @@
                 }
             };
 
-            synth.speak(utterance);
+            currentUtterance.onerror = function(event) {
+                console.error("Speech Error:", event);
+                // 發生錯誤時嘗試重設按鈕
+                updateButtons(false);
+            };
+
+            synth.speak(currentUtterance);
             updateButtons(true);
         }
 
@@ -389,12 +403,14 @@
             }
         }
 
-        // 定期檢查以防止某些瀏覽器語音引擎自動逾時
+        // 定期檢查維持背景活躍
         setInterval(() => {
             if (synth.speaking && !synth.paused) {
-                synth.resume();
+                // 這是為了防止某些移動端瀏覽器自動進入休眠
+                window.speechSynthesis.pause();
+                window.speechSynthesis.resume();
             }
-        }, 10000);
+        }, 8000);
     </script>
 </body>
 </html>
