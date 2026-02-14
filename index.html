@@ -192,30 +192,27 @@
             white-space: pre-wrap; line-height: 2; font-size: 1.3rem;
         }
 
-        /* 去背筆跡優化樣式 */
+        /* 墨寶專用頁尾 */
         .handwritten-footer {
             width: 100%;
             max-width: 800px;
-            padding: 30px 10px 50px 10px;
+            padding: 30px 10px 60px 10px; /* 底部增加一點空間 */
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .handwritten-img {
-            width: 85%;
-            max-width: 450px;
+            width: 90%;
+            max-width: 500px;
             height: auto;
-            margin-bottom: 12px;
             /* 黑夜模式：金色發光 */
             filter: drop-shadow(0px 0px 4px rgba(212, 175, 55, 0.7));
         }
-        /* 白天模式：增加深色細描邊以提升易讀性 */
+        /* 白天模式下微調 */
         body.light-mode .handwritten-img {
-            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.15));
         }
-        .footer-text { font-size: 1.15rem; color: var(--gold); font-weight: 900; letter-spacing: 2px; }
-
     </style>
 </head>
 <body>
@@ -240,7 +237,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <div class="version-tag">Version 1.9.9.2</div>
+            <div class="version-tag">Version 1.9.9.3</div>
         </header>
         
         <div class="menu-grid">
@@ -271,8 +268,7 @@
         </div>
         
         <div class="handwritten-footer">
-            <img src="祝福.png" alt="導師筆跡：祝福" class="handwritten-img">
-            <div class="footer-text">福慧增長 早證菩提</div>
+            <img src="祝福.png" alt="導師墨寶：祝福" class="handwritten-img">
         </div>
     </div>
 
@@ -289,8 +285,7 @@
         <button class="btn-back" onclick="goHome()" style="font-weight:900;">回首頁</button>
         
         <div class="handwritten-footer">
-            <img src="祝福.png" alt="導師筆跡：祝福" class="handwritten-img">
-            <div class="footer-text">福慧增長 早證菩提</div>
+            <img src="祝福.png" alt="導師墨寶：祝福" class="handwritten-img">
         </div>
     </div>
 
