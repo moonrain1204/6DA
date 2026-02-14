@@ -46,18 +46,16 @@
 
         header {
             text-align: center;
-            padding: 40px 5px; /* 縮減左右內距給標題更多空間 */
+            padding: 40px 5px;
             border-bottom: 2px solid var(--gold);
             width: 100%;
             max-width: 900px;
         }
 
-        /* 標題優化：字體顯著放大，強制單行 */
         h1 { 
-            /* 使用 clamp 讓字體在手機(5.5vw)到桌機(2.2rem)之間動態縮放 */
             font-size: clamp(1.35rem, 5.8vw, 2.2rem); 
             color: var(--gold); 
-            letter-spacing: -1px; /* 緊湊字距以利單行顯示大字 */
+            letter-spacing: -1px;
             margin: 0 0 8px 0; 
             line-height: 1.2; 
             font-weight: 900; 
@@ -66,7 +64,6 @@
             display: block;
         }
 
-        /* 標題套用深藍色（白天模式） */
         body.light-mode h1, 
         body.light-mode .menu-item, 
         body.light-mode #page-title-display {
@@ -174,6 +171,7 @@
         }
         .btn-play { background-color: #2e7d32; color: white; }
         .btn-stop { background-color: #c62828; color: white; }
+        .btn-back { background-color: var(--btn-back-bg); color: white; width: 100%; max-width: 200px; padding: 12px; border: none; border-radius: 10px; cursor: pointer; display: block; margin: 0 auto; }
         
         .bottom-btn {
             position: fixed; bottom: 25px; width: 60px; height: 60px;
@@ -193,7 +191,31 @@
             border-radius: 15px; max-width: 90%; width: 420px; border: 2px solid var(--gold);
             white-space: pre-wrap; line-height: 2; font-size: 1.3rem;
         }
-        footer { padding: 30px; font-size: 1.1rem; text-align: center; color: var(--gold); font-weight: 900; }
+
+        /* 去背筆跡優化樣式 */
+        .handwritten-footer {
+            width: 100%;
+            max-width: 800px;
+            padding: 30px 10px 50px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .handwritten-img {
+            width: 85%;
+            max-width: 450px;
+            height: auto;
+            margin-bottom: 12px;
+            /* 黑夜模式：金色發光 */
+            filter: drop-shadow(0px 0px 4px rgba(212, 175, 55, 0.7));
+        }
+        /* 白天模式：增加深色細描邊以提升易讀性 */
+        body.light-mode .handwritten-img {
+            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
+        }
+        .footer-text { font-size: 1.15rem; color: var(--gold); font-weight: 900; letter-spacing: 2px; }
+
     </style>
 </head>
 <body>
@@ -218,7 +240,7 @@
         <header>
             <h1>大自在王佛讚頌與六大心法</h1>
             <p class="subtitle">佛乘宗法要序</p>
-            <div class="version-tag">Version 1.9.8</div>
+            <div class="version-tag">Version 1.9.9.2</div>
         </header>
         
         <div class="menu-grid">
@@ -247,7 +269,11 @@
                 <div>當前這輪結束時間：<span id="stat-endtime" class="data-highlight">--:--</span></div>
             </div>
         </div>
-        <footer>福慧增長 早證菩提</footer>
+        
+        <div class="handwritten-footer">
+            <img src="祝福.png" alt="導師筆跡：祝福" class="handwritten-img">
+            <div class="footer-text">福慧增長 早證菩提</div>
+        </div>
     </div>
 
     <div id="content-page">
@@ -261,7 +287,11 @@
         </div>
         <div id="page-content" class="content-body"></div>
         <button class="btn-back" onclick="goHome()" style="font-weight:900;">回首頁</button>
-        <footer style="position: static;">福慧增長 早證菩提</footer>
+        
+        <div class="handwritten-footer">
+            <img src="祝福.png" alt="導師筆跡：祝福" class="handwritten-img">
+            <div class="footer-text">福慧增長 早證菩提</div>
+        </div>
     </div>
 
     <audio id="mainAudio"></audio>
@@ -282,7 +312,7 @@
             fiveTreasures: { title: "皈依五寶", file: "皈依五寶.wav", isHtml: false, content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶應具足。" },
             repentance: { title: "禮佛拜懺文", file: "禮佛拜懺文.wav", isHtml: false, content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子○○○無始劫來，因貪偵癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" },
             rules: { title: "門規", file: "門規.wav", isHtml: true, content: getRulesContent() },
-            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n（內容已完整保留，如需查看請滑動選單）" }
+            preface: { title: "佛乘宗法要序", file: "佛乘宗法要序.mp3", isHtml: false, content: "【佛乘宗法要序】\n宗師緣道上人羅雷居士書於台灣\n佛曆二五三三年佛誕日\n\n（內容已完整保留）" }
         };
 
         const audio = document.getElementById('mainAudio');
@@ -303,12 +333,14 @@
         }
 
         function updateTimeData() {
+            if(singleRoundSeconds === 0) return;
             const mins = Math.floor(singleRoundSeconds / 60);
             const secs = Math.floor(singleRoundSeconds % 60);
             document.getElementById('stat-duration').innerText = `${mins} 分 ${secs} 秒`;
             const now = new Date();
             const end = new Date(now.getTime() + singleRoundSeconds * 1000);
-            document.getElementById('stat-endtime').innerText = `${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}`;
+            const endStr = `${end.getHours().toString().padStart(2, '0')}:${end.getMinutes().toString().padStart(2, '0')}`;
+            document.getElementById('stat-endtime').innerText = endStr;
         }
 
         function toggleLoopMode() {
@@ -394,7 +426,7 @@
         }
 
         function getHeartContent() {
-            const list = ["一、慈悲心：大慈大悲度眾生，拔苦與樂菩薩行。", "二、平等心：眾生佛性本平等，三世十方一心圓。", "三、捨離心：捨離三界貪瞋癡，頓入解脫自在門。", "四、精進心：萬法唯心常精進，法輪常轉是佛心。", "五、歡喜心：得大自在心歡喜，隨緣度眾樂無邊。", "六、謙和心：心同法界眾和合，萬法圓通人天師。", "七、報恩心：佛師父母眾生恩，飲水思源銘心田。", "八、法忍心：無生法忍入佛地，全憑正道開魔關。", "九、無畏心：無縛無著真解脫，萬德莊嚴大無畏。", "十、圓覺心：十大一如福慧全，常樂我淨法身圓。"];
+            const list = ["一、慈悲心：大慈大悲度眾生，拔苦與樂菩薩行。", "二、平等心：眾生佛性本平等，三世十方一心圓。", "三、捨離心：捨離三界貪偵癡，頓入解脫自在門。", "四、精進心：萬法唯心常精進，法輪常轉是佛心。", "五、歡喜心：得大自在心歡喜，隨緣度眾樂無邊。", "六、謙和心：心同法界眾和合，萬法圓通人天師。", "七、報恩心：佛師父母眾生恩，飲水思源銘心田。", "八、法忍心：無生法忍入佛地，全憑正道開魔關。", "九、無畏心：無縛無著真解脫，萬德莊嚴大無畏。", "十、圓覺心：十大一如福慧全，常樂我淨法身圓。"];
             return list.map(item => `<span class="indent-box">${item}</span>`).join('');
         }
 
