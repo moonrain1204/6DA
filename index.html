@@ -10,8 +10,19 @@
             --bg-color: #1a1a1a;
             --card-bg: #2d2d2d;
             --text-color: #e0e0e0;
+            --btn-back-bg: #546e7a;
         }
-        * { box-sizing: border-box; }
+
+        /* 開燈模式（鵝黃版面） */
+        body.light-mode {
+            --bg-color: #fff9e6; 
+            --card-bg: #fdf2d0;
+            --text-color: #001f3f; 
+            --gold: #b8860b;
+            --btn-back-bg: #a1b0b8;
+        }
+
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
         body {
             font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
             background-color: var(--bg-color);
@@ -53,7 +64,6 @@
             padding: 20px 15px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
             border-radius: 10px;
             font-size: 1.1rem;
             color: var(--gold);
@@ -61,9 +71,8 @@
             align-items: center;
             justify-content: center;
             min-height: 65px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
-        .menu-item:hover { background: var(--gold); color: black; transform: translateY(-2px); }
 
         #content-page {
             display: none;
@@ -104,16 +113,14 @@
             justify-content: center;
             gap: 5px;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .btn-play { background-color: #2e7d32; color: white; }
         .btn-pause { background-color: #f9a825; color: black; }
         .btn-stop { background-color: #c62828; color: white; }
-        
         .hidden { display: none !important; }
 
         .btn-back { 
-            background-color: #546e7a; 
+            background-color: var(--btn-back-bg); 
             color: white; 
             width: 100%; 
             padding: 15px;
@@ -121,12 +128,32 @@
             border-radius: 8px;
             font-size: 1.1rem;
             cursor: pointer;
-            transition: 0.2s;
         }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            background-color: var(--gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
         footer { margin-top: auto; padding: 25px; font-size: 0.85rem; opacity: 0.5; text-align: center; color: var(--gold); }
     </style>
 </head>
 <body>
+
+    <div id="themeToggle" class="theme-toggle" onclick="toggleTheme()">💡</div>
 
     <div id="home-page" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <header>
@@ -148,7 +175,7 @@
     <div id="content-page">
         <h2 id="page-title-display" style="color: var(--gold); text-align: center; font-size: 1.4rem; margin-top: 5px;"></h2>
         <div class="controls">
-            <button id="playBtn" class="btn-play" onclick="speak()">▶ 播放</button>
+            <button id="playBtn" class="btn-play" onclick="speak(false)">▶ 播放</button>
             <button id="pauseBtn" class="btn-pause hidden" onclick="pause()">⏸ 暫停</button>
             <button id="stopBtn" class="btn-stop" onclick="stop()">⏹ 停止</button>
         </div>
@@ -164,10 +191,13 @@
             nine: { title: "九字禪", content: "【九字禪】\n南無：華譯歸命、敬禮、歸依、救我、度我等義。\n本師：本性，即自性，即佛性，即法性。\n大：體、相、智、德、理、事、能、用、時、空，與法界同一理量。\n自在：萬法拘束不得，圓融精神與物質世界，無礙解脫自在。\n王：一切佛之自性法身。\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿。" },
             tenOne: { title: "十大一如", content: "【十大一如】\n體大：心物一如。相大：自他一如。智大：理事一如。德大：慈悲一如。理大：萬法一如。事大：福慧一如。能大：質能一如。用大：顯隱一如。時大：三世一如。空大：大小一如。" },
             tenHeart: { title: "十無量相應心品", content: "【十無量相應心品】\n一、慈悲心：大慈大悲度眾生。\n二、平等心：眾生佛性本平等。\n三、捨離心：捨離三界貪瞋癡。\n四、精進心：萬法唯心常精進。\n五、歡喜心：得大自在心歡喜。\n六、謙和心：心同法界眾和合。\n七、報恩心：飲水思源銘心田。\n八、法忍心：無生法忍入佛地。\n九、無畏心：萬德莊嚴大無畏。\n十、圓覺心：常樂我淨法身圓。" },
-            fiveTreasures: { title: "皈依五寶", content: "【皈依五寶】\n佛、法、僧、師、自性。" },
+            fiveTreasures: { 
+                title: "皈依五寶", 
+                content: "【皈依五寶】\n佛：證悟法界萬有一切事理實相，自覺覺他，覺行圓滿，萬德莊嚴之聖者。\n法：出離三界輪迴，圓證實相，了脫生死，即生成佛之大法。\n僧：和合之義，僧團、菩薩僧、聖僧。\n師：實證法身，擁有成佛之法，真正能帶領眾生出離三界之善知識。\n自性：即佛性，即法性，即本心，即本師，圓滿五寶即具足。" 
+            },
             repentance: { 
                 title: "禮佛拜懺文", 
-                content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子○無始劫來，因貪瞋癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" 
+                content: "【禮佛拜懺文】\n一心圓法界，感應遍十方，謹以戒定慧心香，普供養十方三世諸佛菩薩。\n弟子法○無始劫來，因貪瞋癡所造身語意惡業，今深自覺悟，罪性本空，趣向真如，祈求大慈大悲威德力加持，三業頓淨，圓證菩提，並以此功德，普迴向十方眾生，常樂我淨，同證佛果。\n南無本師大自在王佛\n南無本師大自在王佛\n南無本師大自在王佛" 
             },
             rules: { title: "門規與密囑", content: "【門規】\n第一條：尊師重道，護持五寶。\n第二條：慈悲平等，普度眾生。\n第三條：自立活命，奉獻公益。\n第四條：遵行門規，光大本門。\n\n【密囑】\n第一項：每月將收入一部分捐獻。\n第二項：修行密法不得超傳。" },
             preface: { title: "佛乘宗法要序", content: "【佛乘宗法要序】\n以此無念之念，念念不離眾生。\n住無相之相，法法不離自性。\n勿繫塵勞，精進歡喜。\n篤行門規，佛道自成。" }
@@ -176,8 +206,17 @@
         const synth = window.speechSynthesis;
         let utterance = null;
         let isLooping = false;
+        let currentId = '';
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeToggle');
+            body.classList.toggle('light-mode');
+            btn.innerText = body.classList.contains('light-mode') ? '🕯' : '💡';
+        }
 
         function showPage(id) {
+            currentId = id;
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('content-page').style.display = 'block';
             document.getElementById('page-title-display').innerText = data[id].title;
@@ -192,7 +231,7 @@
             document.getElementById('content-page').style.display = 'none';
         }
 
-        function speak() {
+        function speak(isSecondRound) {
             if (synth.speaking && synth.paused) {
                 synth.resume();
                 updateButtons(true);
@@ -200,34 +239,36 @@
             }
             stopSpeechOnly();
             isLooping = true;
-            const text = document.getElementById('page-content').innerText;
-            utterance = new SpeechSynthesisUtterance(text);
+            
+            let textToRead = data[currentId].content;
+
+            // 禮佛拜懺文特殊邏輯：第二次循環開始不讀標題
+            if (currentId === 'repentance' && isSecondRound) {
+                const lines = textToRead.split('\n');
+                if (lines[0].includes('【禮佛拜懺文】')) {
+                    lines.shift(); // 移除第一行標題
+                    textToRead = lines.join('\n');
+                }
+            }
+
+            utterance = new SpeechSynthesisUtterance(textToRead);
             utterance.lang = 'zh-TW';
             utterance.rate = 0.88; 
-            utterance.onend = function() {
-                if (isLooping) { speak(); } else { updateButtons(false); }
+            utterance.onend = function() { 
+                if (isLooping) { 
+                    speak(true); // 標記為第二次之後的循環
+                } else { 
+                    updateButtons(false); 
+                } 
             };
             synth.speak(utterance);
             updateButtons(true);
         }
 
-        function pause() {
-            if (synth.speaking) {
-                synth.pause();
-                updateButtons(false);
-            }
-        }
-
-        function stop() {
-            isLooping = false;
-            synth.cancel();
-            updateButtons(false);
-        }
-
-        function stopSpeechOnly() {
-            synth.cancel();
-        }
-
+        function pause() { if (synth.speaking) { synth.pause(); updateButtons(false); } }
+        function stop() { isLooping = false; synth.cancel(); updateButtons(false); }
+        function stopSpeechOnly() { synth.cancel(); }
+        
         function updateButtons(isPlaying) {
             const playBtn = document.getElementById('playBtn');
             const pauseBtn = document.getElementById('pauseBtn');
